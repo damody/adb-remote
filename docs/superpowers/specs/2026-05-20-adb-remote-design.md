@@ -4,7 +4,7 @@ Date: 2026-05-20
 
 ## Purpose
 
-Build an internal Windows-only ADB remote access tool for a company device pool. A Windows machine connected to Android devices can share those devices through a public or reachable server. Another Windows machine can list shared devices, lease one exclusively, and expose it locally so existing ADB tooling can connect with `adb connect 127.0.0.1:<port>`.
+Build an internal ADB remote access tool for a company device pool. A Windows machine connected to Android devices can share those devices through a public or reachable server, which may run on Linux or Windows. Another Windows machine can list shared devices, lease one exclusively, and expose it locally so existing ADB tooling can connect with `adb connect 127.0.0.1:<port>`.
 
 The system favors simple deployment, reliable NAT/firewall traversal, and compatibility with existing Android tooling.
 
@@ -12,7 +12,7 @@ The system favors simple deployment, reliable NAT/firewall traversal, and compat
 
 The MVP has three Rust console programs:
 
-- `adb-remote-server`: public broker with a reachable IP. It manages online device state, display name uniqueness, exclusive leases, audit events, and gRPC stream relay. It does not install Android SDK and does not directly speak to ADB.
+- `adb-remote-server`: Linux/Windows public broker with a reachable IP. It manages online device state, display name uniqueness, exclusive leases, audit events, and gRPC stream relay. It does not install Android SDK and does not directly speak to ADB.
 - `adb-remote-client`: device-side console daemon for Windows hosts connected to Android devices. It scans local ADB devices, registers configured devices with the server, validates per-device passwords, and relays approved ADB streams to the local ADB server at `127.0.0.1:5037`.
 - `adb-remote`: user-side console program. It lists devices from the server, leases one display name, opens a local TCP listener, and forwards local ADB TCP bytes through the server to the device client.
 
@@ -244,7 +244,7 @@ Because there is no account system, knowing the server address allows viewing de
 
 Included:
 
-- Windows-only Rust console programs.
+- Rust console programs with Linux/Windows server support and Windows-focused device/user clients.
 - gRPC/TLS server, device client, and user client.
 - Device scan and local config.
 - User-chosen display names that are unique among active server registrations.
@@ -265,7 +265,7 @@ Not included:
 - Queueing or reservations.
 - Multi-user shared access to one device.
 - ADB protocol parsing.
-- Cross-platform support.
+- Cross-platform device/user client support beyond Windows.
 - AD/LDAP/SSO integration.
 
 ## Testing Strategy
