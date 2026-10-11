@@ -1,0 +1,22 @@
+FROM rust:1-bookworm AS builder
+
+WORKDIR /src
+COPY . .
+RUN cargo build --release -p adb-remote-server
+
+FROM debian:bookworm-slim
+
+RUN useradd --system --home /var/lib/adb-remote-server --create-home adb-remote \
+    && mkdir -p /etc/adb-remote-server /var/lib/adb-remote-server \
+    && chown -R adb-remote:adb-remote /var/lib/adb-remote-server
+
+COPY --from=builder /src/target/release/adb-remote-server /usr/local/bin/adb-remote-server
+COPY packaging/linux/adb-remote-server.service /usr/share/doc/adb-remote-server/adb-remote-server.service
+COPY docs/server-linux.md /usr/share/doc/adb-remote-server/server-linux.md
+
+USER adb-remote
+WORKDIR /var/lib/adb-remote-server
+EXPOSE 8443
+
+ENTRYPOINT ["/usr/local/bin/adb-remote-server"]
+CMD ["serve", "--listen", "0.0.0.0:8443", "--db", "/var/lib/adb-remote-server/adb-remote-server.sqlite3", "--cert", "/etc/adb-remote-server/server.pem", "--key", "/etc/adb-remote-server/server.key"]

@@ -1,0 +1,21 @@
+[Unit]
+Description=ADB Remote Server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=adb-remote
+Group=adb-remote
+WorkingDirectory=/var/lib/adb-remote-server
+ExecStart=/usr/local/bin/adb-remote-server serve --listen 0.0.0.0:8443 --db /var/lib/adb-remote-server/adb-remote-server.sqlite3 --cert /etc/adb-remote-server/server.pem --key /etc/adb-remote-server/server.key
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/lib/adb-remote-server
+
+[Install]
+WantedBy=multi-user.target
