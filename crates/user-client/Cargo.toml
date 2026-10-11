@@ -1,0 +1,22 @@
+[package]
+name = "adb-remote"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+
+[[bin]]
+name = "adb-remote"
+path = "src/main.rs"
+
+[dependencies]
+adb-remote-core = { path = "../core" }
+adb-remote-protocol = { path = "../protocol" }
+anyhow.workspace = true
+clap.workspace = true
+futures.workspace = true
+rpassword.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true
+tonic.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
