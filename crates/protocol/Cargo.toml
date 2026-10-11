@@ -1,0 +1,16 @@
+[package]
+name = "adb-remote-protocol"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+
+[dependencies]
+prost.workspace = true
+prost-types.workspace = true
+serde.workspace = true
+tonic.workspace = true
+tonic-prost.workspace = true
+
+[build-dependencies]
+protoc-bin-vendored = "3"
+tonic-prost-build.workspace = true

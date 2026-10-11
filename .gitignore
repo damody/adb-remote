@@ -1,0 +1,8 @@
+/target/
+*.sqlite3
+*.db
+*.pdb
+*.exe
+*.pem
+*.key
+/dist/
